@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mehdi Reda — Admin Sys & Cybersécurité</title>
+  <meta name="description" content="Mehdi Reda, étudiant en cybersécurité à Montpellier. Ancien admin systèmes & réseaux.">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --bg: #0b0d17;
+      --bg-elev: #151827;
+      --bg-card: rgba(30, 35, 55, 0.5);
+      --border: rgba(140, 160, 220, 0.12);
+      --border-strong: rgba(140, 160, 220, 0.25);
+      --text: #eef0f8;
+      --text-dim: #9ea3bd;
+      --text-faint: #5d6380;
+      --accent-1: #7c9cff;   /* bleu */
+      --accent-2: #c792ea;   /* violet */
+      --accent-3: #82e9c4;   /* menthe */
+      --accent-warm: #ffb77c; /* orange chaud */
+      --gradient: linear-gradient(135deg, #7c9cff 0%, #c792ea 50%, #82e9c4 100%);
+      --gradient-warm: linear-gradient(135deg, #7c9cff 0%, #c792ea 100%);
+      --serif: 'Fraunces', Georgia, serif;
+      --sans: 'Inter', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      font-weight: 400;
+      position: relative;
+    }
+
+    /* ===== ANIMATED BACKGROUND ===== */
+    .aurora {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .aurora::before, .aurora::after {
+      content: '';
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.35;
+    }
+    .aurora::before {
+      background: radial-gradient(circle, #7c9cff, transparent 70%);
+      top: -300px;
+      left: -200px;
+      animation: float1 20s ease-in-out infinite;
+    }
+    .aurora::after {
+      background: radial-gradient(circle, #c792ea, transparent 70%);
+      bottom: -300px;
+      right: -200px;
+      animation: float2 25s ease-in-out infinite;
+    }
+
+    .aurora-third {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #82e9c4, transparent 70%);
+      filter: blur(120px);
+      opacity: 0.2;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -2;
+      animation: float3 30s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(150px, 100px) scale(1.2); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-150px, -100px) scale(1.15); }
+    }
+    @keyframes float3 {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-30%, -70%) scale(1.25); }
+    }
+
+    /* Grid overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(124, 156, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124, 156, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(11, 13, 23, 0.7);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s ease;
+    }
+    nav.scrolled { padding: 1rem 3rem; }
+
+    .logo {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      font-style: italic;
+      background: var(--gradient);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shimmer 4s linear infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 2rem; }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-weight: 400;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: var(--gradient);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after { width: 100%; }
+
+    .cv-btn {
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+      background: var(--gradient-warm);
+      background-size: 200% auto;
+      padding: 0.65rem 1.3rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(124, 156, 255, 0.25);
+    }
+    .cv-btn:hover {
+      background-position: 100% center;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(199, 146, 234, 0.4);
+    }
+
+    .burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 101;
+    }
+    .burger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--text);
+      transition: all 0.3s;
+      border-radius: 1px;
+    }
+    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ===== MAIN ===== */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 3rem;
+      position: relative;
+    }
+
+    section {
+      padding: 7rem 0;
+      position: relative;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--accent-1);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 1.5rem;
+      padding: 0.4rem 0.9rem;
+      background: rgba(124, 156, 255, 0.08);
+      border: 1px solid rgba(124, 156, 255, 0.2);
+      border-radius: 999px;
+    }
+    .section-label::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-1);
+      box-shadow: 0 0 10px var(--accent-1);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    h1, h2, h3 {
+      font-family: var(--serif);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      margin-bottom: 2rem;
+      color: var(--text);
+    }
+    h2 em {
+      font-style: italic;
+      font-weight: 400;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    p {
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      margin-bottom: 1.2rem;
+      max-width: 62ch;
+    }
+    p strong { color: var(--text); font-weight: 500; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 0 6rem;
+      position: relative;
+    }
+
+    .hero-intro {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent-3);
+      letter-spacing: 0.1em;
+      margin-bottom: 2rem;
+      padding: 0.5rem 1rem;
+      background: rgba(130, 233, 196, 0.08);
+      border: 1px solid rgba(130, 233, 196, 0.25);
+      border-radius: 999px;
+      width: fit-content;
+      opacity: 0;
+      animation: fadeUp 1s ease-out 0.2s forwards;
+    }
+    .hero-intro::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-3);
+      box-shadow: 0 0 12px var(--accent-3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 300;
+      letter-spacing: -0.035em;
+      line-height: 0.95;
+      margin-bottom: 2rem;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 1s ease-out 0.4s forwards;
+    }
+    .hero h1 em {
+      font-style: italic;
+      font-weight: 400;
+      background: var(--gradient);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shimmer 5s linear infinite;
+    }
+
+    .hero-tagline {
+      font-size: 1.25rem;
+      color: var(--text-dim);
+      max-width: 58ch;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease-out 0.6s forwards;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 1s ease-out 0.75s forwards;
+    }
+
+    .cta-primary {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+      background: var(--gradient-warm);
+      background-size: 200% auto;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 6px 24px rgba(124, 156, 255, 0.3);
+    }
+    .cta-primary:hover {
+      background-position: 100% center;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 35px rgba(199, 146, 234, 0.45);
+    }
+    .cta-primary::after {
+      content: '→';
+      font-family: var(--serif);
+      font-style: italic;
+      transition: transform 0.3s ease;
+    }
+    .cta-primary:hover::after { transform: translateX(5px); }
+
+    .cta-secondary {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 1rem 2rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    .cta-secondary:hover {
+      border-color: var(--accent-1);
+      color: var(--accent-1);
+      background: rgba(124, 156, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 3rem;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-faint);
+      letter-spacing: 0.05em;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 1s ease-out 0.9s forwards;
+    }
+    .hero-meta div { display: flex; flex-direction: column; gap: 0.3rem; }
+    .hero-meta span { color: var(--text); font-family: var(--sans); font-size: 0.98rem; font-weight: 500; }
+    .hero-meta small { font-size: 0.72rem; text-transform: uppercase; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== ABOUT ===== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-label {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      padding-top: 1rem;
+      position: sticky;
+      top: 120px;
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 2rem;
+      padding: 1.8rem;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--gradient);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .timeline-item:hover {
+      border-color: var(--border-strong);
+      transform: translateX(6px);
+      background: rgba(30, 35, 55, 0.7);
+    }
+    .timeline-item:hover::before { opacity: 1; }
+
+    .timeline-date {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--accent-1);
+      letter-spacing: 0.05em;
+      padding-top: 0.3rem;
+      font-weight: 500;
+    }
+
+    .timeline-content h3 {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.01em;
+    }
+    .timeline-content .sub {
+      font-size: 0.9rem;
+      color: var(--accent-2);
+      font-style: italic;
+    }
+
+    /* XP list */
+    .xp-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 0.5rem 1.5rem;
+      list-style: none;
+      margin-top: 0.8rem;
+    }
+    .xp-list li {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      padding: 0.4rem 0 0.4rem 1.4rem;
+      position: relative;
+      transition: color 0.3s, padding-left 0.3s;
+    }
+    .xp-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent-1);
+      font-size: 0.9rem;
+    }
+    .xp-list li:hover { color: var(--text); padding-left: 1.6rem; }
+
+    /* ===== PROJECTS ===== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      padding: 1.8rem;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      transition: all 0.4s ease;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      padding: 1px;
+      background: var(--gradient);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .project-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%), rgba(124, 156, 255, 0.1), transparent 40%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      background: rgba(30, 35, 55, 0.7);
+    }
+    .project-card:hover::before { opacity: 1; }
+    .project-card:hover::after { opacity: 1; }
+
+    .project-num {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent-3);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.8rem;
+      font-weight: 500;
+    }
+
+    .project-card h3 {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.01em;
+      transition: color 0.3s ease;
+    }
+
+    .project-card:hover h3 {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .project-card p {
+      font-size: 0.94rem;
+      color: var(--text-dim);
+      margin-bottom: 1.2rem;
+      max-width: none;
+    }
+
+    .project-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .project-tags span {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent-1);
+      letter-spacing: 0.05em;
+      padding: 0.3rem 0.7rem;
+      background: rgba(124, 156, 255, 0.08);
+      border: 1px solid rgba(124, 156, 255, 0.2);
+      border-radius: 999px;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-lead {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+      font-weight: 300;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 2rem;
+      letter-spacing: -0.01em;
+    }
+    .contact-lead em {
+      font-style: italic;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .contact-links { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+
+    .contact-links a {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+      padding: 1.1rem 1.4rem;
+      color: var(--text);
+      text-decoration: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+    .contact-links a:hover {
+      border-color: var(--accent-1);
+      background: rgba(124, 156, 255, 0.06);
+      transform: translateX(4px);
+    }
+
+    .contact-links .label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .contact-links .value { font-size: 0.98rem; font-weight: 500; }
+    .contact-links .arrow {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--accent-1);
+      transition: transform 0.3s ease;
+    }
+    .contact-links a:hover .arrow { transform: translateX(6px); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 3rem;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      letter-spacing: 0.05em;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+
+    /* ===== REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      nav, nav.scrolled { padding: 1.2rem 2rem; }
+      main { padding: 0 2rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .about-label { position: static; padding-top: 0; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+      .timeline-item { grid-template-columns: 1fr; gap: 0.5rem; padding: 1.4rem; }
+    }
+
+    @media (max-width: 700px) {
+      nav, nav.scrolled { padding: 1rem 1.5rem; }
+      .burger { display: flex; }
+      .nav-right { gap: 1rem; }
+      .cv-btn { padding: 0.55rem 1rem; font-size: 0.8rem; }
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: min(78vw, 320px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 2rem;
+        background: rgba(11, 13, 23, 0.97);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 4rem 2.5rem;
+        border-left: 1px solid var(--border);
+        transform: translateX(110%);
+        transition: transform 0.4s ease;
+      }
+      .nav-links.open { transform: translateX(0); }
+      .nav-links a { font-size: 1.5rem; font-family: var(--serif); font-weight: 300; }
+
+      main { padding: 0 1.5rem; }
+      section { padding: 5rem 0; }
+      .hero { padding: 7rem 0 4rem; }
+      .hero-meta { gap: 1.8rem; }
+      .hero-ctas { flex-direction: column; align-items: stretch; }
+      .cta-primary, .cta-secondary { justify-content: center; text-align: center; }
+      h2 { font-size: 1.9rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      main { padding: 0 1.2rem; }
+      section { padding: 4rem 0; }
+      .hero-meta { flex-direction: column; gap: 1.2rem; padding-top: 1.5rem; }
+      .hero-tagline { font-size: 1.08rem; }
+      p { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated background -->
+  <div class="aurora"></div>
+  <div class="aurora-third"></div>
+
+  <nav id="nav">
+    <a href="#hero" class="logo">mehdi reda.</a>
+    <button class="burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-right">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#education">Parcours</a></li>
+        <li><a href="#projects">Projets</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <!-- 👇 REMPLACER # PAR LE LIEN DE TON CV -->
+      <a href="https://drive.google.com/file/d/1-QfQ1VdCCT38PNAqA_A_RY2sWL0W7GGC/view?usp=sharing" target="_blank" rel="noopener" class="cv-btn">Voir mon CV</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-intro">Disponible · Stage / Alternance</div>
+      <h1>Mehdi Reda,<br>de l'admin système et réseau à la <em>cybersécurité</em>.</h1>
+      <p class="hero-tagline">
+        Ancien étudiant en administration systèmes &amp; réseaux, désormais en Bachelor Cybersécurité à Montpellier. Je conçois, j'exploite, je sécurise des infrastructures — et j'apprends vite.
+      </p>
+      <div class="hero-ctas">
+        <!-- 👇 REMPLACER # PAR LE LIEN DE TON CV -->
+        <a href="https://drive.google.com/file/d/1-QfQ1VdCCT38PNAqA_A_RY2sWL0W7GGC/view?usp=sharing" target="_blank" rel="noopener" class="cta-primary">Voir mon CV</a>
+        <a href="#projects" class="cta-secondary">Découvrir mes projets</a>
+      </div>
+      <div class="hero-meta">
+        <div>
+          <small>Localisation</small>
+          <span>Montpellier, France</span>
+        </div>
+        <div>
+          <small>Formation</small>
+          <span>B3 CYBERXP</span>
+        </div>
+        <div>
+          <small>Ancien parcours</small>
+          <span>BTS SIO · SISR</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="reveal">
+      <div class="about-grid">
+        <div class="about-label"></div>
+        <div>
+          <h2>À <em>propos</em></h2>
+          <p>
+            Je m'appelle Mehdi Reda. Titulaire d'un Baccalauréat scientifique (Mathématiques &amp; Informatique), j'ai rejoint Montpellier pour suivre un <strong>BTS SIO option SISR</strong> à l'Esicad — spécialisé en administration systèmes &amp; réseaux.
+          </p>
+          <p>
+            Après deux années à construire des infrastructures, configurer des parcs, manipuler des VMs et déployer des services, j'ai choisi de <strong>pivoter vers la cybersécurité</strong> en intégrant un Bachelor B3 CYBERXP.
+          </p>
+          <p>
+            Aujourd'hui, je combine les deux mondes : je sais comment fonctionne une infrastructure — et j'apprends comment la protéger, la tester et l'attaquer. Je possède une forte capacité à résoudre des problèmes et une grande attention aux détails.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION + XP -->
+    <section id="education" class="reveal">
+      <div class="section-label">Parcours</div>
+      <h2>Formation &amp; <em>expérience</em></h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">2025 — 2026</div>
+          <div class="timeline-content">
+            <h3>Bachelor Cybersécurité — B3 CYBERXP</h3>
+            <div class="sub">Sécurité offensive, défense, infrastructure</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2023 — 2025</div>
+          <div class="timeline-content">
+            <h3>BTS SIO — option SISR</h3>
+            <div class="sub">Esicad, Montpellier</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2023</div>
+          <div class="timeline-content">
+            <h3>Baccalauréat Scientifique</h3>
+            <div class="sub">Jeanne d'Arc, Sénégal</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Expérience</div>
+          <div class="timeline-content">
+            <h3>Stages &amp; missions</h3>
+            <ul class="xp-list">
+              <li>Stage Admin Système &amp; Réseau</li>
+              <li>Assistant informatique</li>
+              <li>Assistant projet base de données</li>
+              <li>Manipulation de machines virtuelles</li>
+              <li>Conception de sites web pour clients</li>
+              <li>Lancement de projet e-commerce</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="reveal">
+      <div class="section-label">Sélection</div>
+      <h2>Mes <em>projets</em></h2>
+      <div class="projects-grid">
+
+        <a class="project-card" href="" target="_blank" rel="noopener">
+          <div class="project-num">// 01</div>
+          <h3>NordTransit Logistics</h3>
+          <p>Architecture MySQL haute disponibilité Master/Slave répliquée vers Azure via VPN IPSec FortiGate. Backup Proxmox.</p>
+          <div class="project-tags"><span>MySQL</span><span>Azure</span><span>FortiGate</span></div>
+        </a>
+
+        <a class="project-card" href="https://drive.google.com/file/d/12oeCTdwMryva3AP1AzRZ5NxFqrg3yx_G/view?usp=sharing" target="_blank" rel="noopener">
+          <div class="project-num">// 02</div>
+          <h3>Proxy Pawned — Juice Shop</h3>
+          <p>Lab pentest complet : SSH tunneling, Meterpreter, attaques DDE, pivoting réseau et exploits OWASP Juice Shop.</p>
+          <div class="project-tags"><span>Metasploit</span><span>OWASP</span><span>Pentest</span></div>
+        </a>
+
+        <a class="project-card" href="#" target="_blank" rel="noopener">
+          <div class="project-num">// 03</div>
+          <h3>FortiGate FSSO Lab</h3>
+          <p>Home lab Windows Server 2022, Active Directory, FSSO Collector Agent et policies LDAP sur FortiGate.</p>
+          <div class="project-tags"><span>FortiGate</span><span>AD</span><span>LDAP</span></div>
+        </a>
+
+        <a class="project-card" href="https://drive.google.com/file/d/1we6U9X30vuC4euGKZXKyCbRZRRazxvj4/view?usp=sharing" target="_blank" rel="noopener">
+          <div class="project-num">// 04</div>
+          <h3>FortiGate CVE Lab</h3>
+          <p>Exploitation de CVE-2018-13379 (path traversal) et CVE-2022-40684 (auth bypass) sur FortiGate.</p>
+          <div class="project-tags"><span>CVE</span><span>Pentest</span><span>FortiGate</span></div>
+        </a>
+
+        <a class="project-card" href="#" target="_blank" rel="noopener">
+          <div class="project-num">// 05</div>
+          <h3>Création de VMs</h3>
+          <p>Déploiement et configuration de machines virtuelles sous VMware et Proxmox pour environnements de test.</p>
+          <div class="project-tags"><span>VMware</span><span>Proxmox</span></div>
+        </a>
+
+        <a class="project-card" href="#" target="_blank" rel="noopener">
+          <div class="project-num">// 06</div>
+          <h3>Projet E5 — BTS SIO</h3>
+          <p>Projet d'examen sur la production et la fourniture de services informatiques.</p>
+          <div class="project-tags"><span>BTS SIO</span></div>
+        </a>
+
+        <a class="project-card" href="#" target="_blank" rel="noopener">
+          <div class="project-num">// 07</div>
+          <h3>Projet 1 — BTS SIO E6</h3>
+          <p>Premier projet d'examen E6 : conception, développement et soutenance orale.</p>
+          <div class="project-tags"><span>BTS SIO</span></div>
+        </a>
+
+        <a class="project-card" href="#" target="_blank" rel="noopener">
+          <div class="project-num">// 08</div>
+          <h3>Projet 2 — BTS SIO E6</h3>
+          <p>Second projet d'examen E6 : approfondissement technique et gestion de projet.</p>
+          <div class="project-tags"><span>BTS SIO</span></div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="reveal">
+      <div class="section-label">Contact</div>
+      <div class="contact-wrap">
+        <div>
+          <p class="contact-lead">Un projet, une question, une <em>opportunité</em> ? Écrivons-nous.</p>
+        </div>
+        <ul class="contact-links">
+          <li>
+            <a href="/cdn-cgi/l/email-protection#7a1915140e1b190e3a171f121e1357081f1e1b54191517">
+              <span class="label">Email</span>
+              <span class="value"><span class="__cf_email__" data-cfemail="e0838f8e94818394a08d85888489cd92858481ce838f8d">[email&#160;protected]</span></span>
+              <span class="arrow">→</span>
+            </a>
+          </li>
+          <li>
+            <!-- 👇 REMPLACER # PAR LE LIEN DE TON CV -->
+            <a href="https://drive.google.com/file/d/1-QfQ1VdCCT38PNAqA_A_RY2sWL0W7GGC/view?usp=sharing" target="_blank" rel="noopener">
+              <span class="label">CV</span>
+              <span class="value">Télécharger le CV</span>
+              <span class="arrow">→</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/mehdi-reda-241b042bb/" target="_blank" rel="noopener">
+              <span class="label">LinkedIn</span>
+              <span class="value">/in/mehdi-reda</span>
+              <span class="arrow">→</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2025 Mehdi Reda
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Burger
+    const burger = document.getElementById('burger');
+    const navLinks = document.getElementById('navLinks');
+    burger.addEventListener('click', () => {
+      burger.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        burger.classList.remove('open');
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    });
+
+    // Reveal on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Project cards mouse follow
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mx', x + '%');
+        card.style.setProperty('--my', y + '%');
+      });
+    });
+  </script>
+</body>
+</html>
